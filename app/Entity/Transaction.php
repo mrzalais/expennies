@@ -64,6 +64,7 @@ class Transaction
     public function setDescription(string $description): Transaction
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -75,6 +76,7 @@ class Transaction
     public function setDate(DateTime $date): Transaction
     {
         $this->date = $date;
+
         return $this;
     }
 
@@ -86,6 +88,7 @@ class Transaction
     public function setAmount(float $amount): Transaction
     {
         $this->amount = $amount;
+
         return $this;
     }
 
@@ -97,6 +100,7 @@ class Transaction
     public function setCreatedAt(DateTime $createdAt): Transaction
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -108,6 +112,7 @@ class Transaction
     public function setUpdatedAt(DateTime $updatedAt): Transaction
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -139,7 +144,7 @@ class Transaction
         return $this;
     }
 
-    public function getReceipts(): Collection
+    public function getReceipts(): ArrayCollection|Collection
     {
         return $this->receipts;
     }
@@ -150,5 +155,4 @@ class Transaction
 
         return $this;
     }
-
 }
