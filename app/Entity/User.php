@@ -60,6 +60,7 @@ class User
     public function setName(string $name): User
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -71,6 +72,7 @@ class User
     public function setEmail(string $email): User
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -82,6 +84,7 @@ class User
     public function setPassword(string $password): User
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -93,6 +96,7 @@ class User
     public function setCreatedAt(DateTime $createdAt): User
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -104,10 +108,11 @@ class User
     public function setUpdatedAt(DateTime $updatedAt): User
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
-    public function getCategories(): Collection
+    public function getCategories(): ArrayCollection|Collection
     {
         return $this->categories;
     }
@@ -119,7 +124,7 @@ class User
         return $this;
     }
 
-    public function getTransactions(): Collection
+    public function getTransactions(): ArrayCollection|Collection
     {
         return $this->transactions;
     }
@@ -130,5 +135,4 @@ class User
 
         return $this;
     }
-
 }

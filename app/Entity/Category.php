@@ -54,6 +54,7 @@ class Category
     public function setName(string $name): Category
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -65,6 +66,7 @@ class Category
     public function setCreatedAt(DateTime $createdAt): Category
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -76,6 +78,7 @@ class Category
     public function setUpdatedAt(DateTime $updatedAt): Category
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -93,7 +96,7 @@ class Category
         return $this;
     }
 
-    public function getTransactions(): Collection
+    public function getTransactions(): ArrayCollection|Collection
     {
         return $this->transactions;
     }
