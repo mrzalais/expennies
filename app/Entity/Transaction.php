@@ -50,4 +50,105 @@ class Transaction
     {
         $this->receipts = new ArrayCollection();
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): Transaction
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getDate(): DateTime
+    {
+        return $this->date;
+    }
+
+    public function setDate(DateTime $date): Transaction
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    public function getAmount(): float
+    {
+        return $this->amount;
+    }
+
+    public function setAmount(float $amount): Transaction
+    {
+        $this->amount = $amount;
+        return $this;
+    }
+
+    public function getCreatedAt(): DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTime $createdAt): Transaction
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    public function getUpdatedAt(): DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(DateTime $updatedAt): Transaction
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): Transaction
+    {
+        $user->addTransaction($this);
+
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(Category $category): Transaction
+    {
+        $category->addTransaction($this);
+
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getReceipts(): Collection
+    {
+        return $this->receipts;
+    }
+
+    public function addReceipt(Receipt $receipt): Transaction
+    {
+        $this->receipts->add($receipt);
+
+        return $this;
+    }
+
 }
