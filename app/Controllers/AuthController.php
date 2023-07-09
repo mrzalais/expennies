@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Controllers;
 
 use App\Entity\User;
+use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -45,8 +46,7 @@ class AuthController
         if($validator->validate()) {
             echo "Yay! We're all good!";
         } else {
-            // Errors
-            var_dump($validator->errors());
+            throw new ValidationException($validator->errors());
         }
 
         $user = new User();
