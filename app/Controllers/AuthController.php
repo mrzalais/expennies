@@ -4,13 +4,17 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Entity\User;
+use App\Exception\ValidationException;
+use Doctrine\ORM\EntityManager;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
+use Valitron\Validator;
 
 class AuthController
 {
-    public function __construct(private readonly Twig $twig)
+    public function __construct(private readonly Twig $twig, private readonly EntityManager $entityManager)
     {
     }
 
@@ -26,7 +30,33 @@ class AuthController
 
     public function register(Request $request, Response $response): Response
     {
-        // TODO: Implement User Registration
+        $data = $request->getParsedBody();
+
+        $validator = new Validator($data);
+        $validator->rule('required', ['name', 'email', 'password', 'confirmPassword']);
+        $validator->rule('email', 'email');
+        $validator->rule('equals', 'confirmPassword', 'password')->label('Confirm Password');
+        $validator->rule(
+            fn ($field, $value, $params, $fields) => !$this->entityManager
+                ->getRepository(User::class)
+                ->count(['email' => $value]),
+            'email'
+        )->message('User with the given email already exists');
+
+        if($validator->validate()) {
+            echo "Yay! We're all good!";
+        } else {
+            throw new ValidationException($validator->errors());
+        }
+
+        $user = new User();
+
+        $user->setName($data['name']);
+        $user->setEmail($data['email']);
+        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         return $response;
     }
