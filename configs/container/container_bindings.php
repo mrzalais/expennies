@@ -5,7 +5,9 @@ declare(strict_types = 1);
 use App\Auth;
 use App\Config;
 use App\Contracts\AuthInterface;
+use App\Contracts\UserProviderServiceInterface;
 use App\Enum\AppEnvironment;
+use App\Services\UserProviderService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use Psr\Container\ContainerInterface;
@@ -71,4 +73,5 @@ return [
     ),
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
     AuthInterface::class => fn(ContainerInterface $container) => $container->get(Auth::class),
+    UserProviderServiceInterface::class => fn(ContainerInterface $container) => $container->get(UserProviderService::class),
 ];
