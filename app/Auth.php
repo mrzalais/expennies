@@ -47,8 +47,6 @@ class Auth implements AuthInterface
             return false;
         }
 
-        session_set_cookie_params(['secure' => true, 'httponly' => true, 'samesite' => 'lax']);
-
         session_regenerate_id();
 
         $_SESSION['user'] = $user->getId();
