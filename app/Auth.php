@@ -39,4 +39,28 @@ class Auth implements AuthInterface
 
         return $this->user;
     }
+
+    public function attemptLogin(array $credentials): bool
+    {
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+
+        if (!$user || !$this->checkCredentials($user, $credentials)) {
+            return false;
+        }
+
+        session_set_cookie_params(['secure' => true, 'httponly' => true, 'samesite' => 'lax']);
+
+        session_regenerate_id();
+
+        $_SESSION['user'] = $user->getId();
+
+        $this->user = $user;
+
+        return true;
+    }
+
+    public function checkCredentials(UserInterface $user, array $credentials): bool
+    {
+        return password_verify($credentials['password'], $user->getPassword());
+    }
 }
