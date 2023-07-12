@@ -82,7 +82,7 @@ class AuthController
 
     public function logOut(Request $request, Response $response): Response
     {
-
+        $this->auth->logout();
 
         return $response->withHeader('Location', '/')->withStatus(302);
     }
