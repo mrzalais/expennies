@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App;
 
 use App\Contracts\SessionInterface;
+use App\DataObjects\SessionConfig;
 use App\Exception\SessionException;
 
 class Session implements SessionInterface
 {
-    public function __construct(private readonly array $options)
+    public function __construct(private readonly SessionConfig $options)
     {
     }
 
