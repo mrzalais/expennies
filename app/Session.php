@@ -25,12 +25,18 @@ class Session implements SessionInterface
         }
 
         session_set_cookie_params([
-            'secure' => $this->options['secure'] ?? true,
-            'httponly' => $this->options['httponly'] ?? true,
-            'samesite' => $this->options['samesite'] ?? 'lax',
+            'secure' => $this->secure ?? true,
+            'httponly' => $this->httponly ?? true,
+            'samesite' => $this->samesite ?? 'lax',
         ]);
 
-        session_start();
+        if (!empty($this->options->name)) {
+            session_name($this->options->name);
+        }
+
+        if (!session_start()) {
+            throw new SessionException('Unable to start the session');
+        }
     }
 
     public function save(): void
