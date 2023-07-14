@@ -73,7 +73,7 @@ class AuthController
         $validator->rule('required', ['email', 'password']);
         $validator->rule('email', 'email');
 
-        if ($this->auth->attemptLogin($data)) {
+        if (!$this->auth->attemptLogin($data)) {
             throw new ValidationException(['password' => ['You have entered an invalid username or password']]);
         }
 

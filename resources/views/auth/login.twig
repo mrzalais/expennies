@@ -17,7 +17,7 @@
                                 </h2>
                                 <form method="post" action="/login">
                                     <div class="form-outline form-white mb-4">
-                                        <input type="email" name="email" class="form-control form-control-lg {{ errors.email ? 'is-invalid' : '' }}"
+                                        <input type="email" name="email" class="form-control form-control-lg {% if errors.email or errors.password %}is-invalid{% endif %}"
                                                value="{{ old.email }}"
                                                placeholder="Email"
                                                required />
@@ -26,7 +26,7 @@
                                         </div>
                                     </div>
                                     <div class="form-outline form-white mb-1">
-                                        <input type="password" name="password" class="form-control form-control-lg {{ errors.password ? 'is-invalid' : '' }}"
+                                        <input type="password" name="password" class="form-control form-control-lg {% if errors.email or errors.password %}is-invalid{% endif %}"
                                                placeholder="Password" required />
                                         <div class="invalid-feedback">
                                             {{ errors.password | first }}
