@@ -22,6 +22,11 @@ class StartSessionsMiddleware implements MiddlewareInterface
 
         $response = $handler->handle($request);
 
+        // TODO: Check for XHR requests
+        if ($request->getMethod() === 'GET') {
+            $this->session->put('previousUrl', (string) $request->getUri());
+        }
+
         session_write_close();
 
         return $response;
