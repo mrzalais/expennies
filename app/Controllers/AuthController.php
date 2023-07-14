@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Controllers;
 
 use App\Contracts\AuthInterface;
+use App\DataObjects\RegisterUserData;
 use App\Entity\User;
 use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManager;
@@ -47,13 +48,13 @@ class AuthController
             'email'
         )->message('User with the given email already exists');
 
-        if($validator->validate()) {
-            echo "Yay! We're all good!";
-        } else {
+        if(!$validator->validate()) {
             throw new ValidationException($validator->errors());
         }
 
-        $this->auth->register($data);
+        $this->auth->register(
+            new RegisterUserData($data['name'], $data['email'], $data['password'])
+        );
 
         return $response->withHeader('Location', '/')->withStatus(302);
     }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Contracts;
 
+use App\DataObjects\RegisterUserData;
+
 interface AuthInterface
 {
     public function user(): ?UserInterface;
@@ -14,7 +16,7 @@ interface AuthInterface
 
     public function logout(): void;
 
-    public function register(array $data): UserInterface;
+    public function register(RegisterUserData $data): UserInterface;
 
     public function logIn(UserInterface $user): void;
 }
