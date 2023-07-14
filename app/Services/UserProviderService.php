@@ -24,4 +24,18 @@ class UserProviderService implements UserProviderServiceInterface
     {
         return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
     }
+
+    public function createUser(array $data): UserInterface
+    {
+        $user = new User();
+
+        $user->setName($data['name']);
+        $user->setEmail($data['email']);
+        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
+    }
 }
