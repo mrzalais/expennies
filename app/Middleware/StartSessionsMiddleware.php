@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Middleware;
 
@@ -27,7 +27,7 @@ class StartSessionsMiddleware implements MiddlewareInterface
             $this->session->put('previousUrl', (string) $request->getUri());
         }
 
-        session_write_close();
+        $this->session->save();
 
         return $response;
     }

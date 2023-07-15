@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
 use App\Contracts\UserInterface;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -36,10 +35,10 @@ class User implements UserInterface
     private string $password;
 
     #[Column(name: 'created_at')]
-    private DateTime $createdAt;
+    private \DateTime $createdAt;
 
     #[Column(name: 'updated_at')]
-    private DateTime $updatedAt;
+    private \DateTime $updatedAt;
 
     #[OneToMany(mappedBy: 'user', targetEntity: Category::class)]
     private Collection $categories;
@@ -49,23 +48,23 @@ class User implements UserInterface
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
+        $this->categories   = new ArrayCollection();
         $this->transactions = new ArrayCollection();
-    }
-
-    #[PrePersist, PreUpdate]
-    public function updateTimestamps(LifecycleEventArgs $args): void
-    {
-        if (!isset($this->createdAt)) {
-            $this->createdAt = new DateTime();
-        }
-
-        $this->updatedAt = new DateTime();
     }
 
     public function getId(): int
     {
         return $this->id;
+    }
+
+    #[PrePersist, PreUpdate]
+    public function updateTimestamps(LifecycleEventArgs $args): void
+    {
+        if (! isset($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+
+        $this->updatedAt = new \DateTime();
     }
 
     public function getName(): string
@@ -104,28 +103,14 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(DateTime $createdAt): User
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(DateTime $updatedAt): User
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
     }
 
     public function getCategories(): ArrayCollection|Collection

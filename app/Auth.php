@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
@@ -28,13 +28,13 @@ class Auth implements AuthInterface
 
         $userId = $this->session->get('user');
 
-        if (!$userId) {
+        if (! $userId) {
             return null;
         }
 
         $user = $this->userProvider->getById($userId);
 
-        if (!$user) {
+        if (! $user) {
             return null;
         }
 
@@ -47,7 +47,7 @@ class Auth implements AuthInterface
     {
         $user = $this->userProvider->getByCredentials($credentials);
 
-        if (!$user || !$this->checkCredentials($user, $credentials)) {
+        if (! $user || ! $this->checkCredentials($user, $credentials)) {
             return false;
         }
 
@@ -61,10 +61,9 @@ class Auth implements AuthInterface
         return password_verify($credentials['password'], $user->getPassword());
     }
 
-    public function logout(): void
+    public function logOut(): void
     {
         $this->session->forget('user');
-
         $this->session->regenerate();
 
         $this->user = null;
@@ -82,7 +81,6 @@ class Auth implements AuthInterface
     public function logIn(UserInterface $user): void
     {
         $this->session->regenerate();
-
         $this->session->put('user', $user->getId());
 
         $this->user = $user;

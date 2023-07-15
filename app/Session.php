@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
@@ -21,20 +21,22 @@ class Session implements SessionInterface
         }
 
         if (headers_sent($fileName, $line)) {
-            throw new SessionException('Headers already sent');
+            throw new SessionException('Headers have already sent by ' . $fileName . ':' . $line);
         }
 
-        session_set_cookie_params([
-            'secure' => $this->secure ?? true,
-            'httponly' => $this->httponly ?? true,
-            'samesite' => $this->samesite ?? 'lax',
-        ]);
+        session_set_cookie_params(
+            [
+                'secure'   => $this->options->secure,
+                'httponly' => $this->options->httpOnly,
+                'samesite' => $this->options->sameSite->value,
+            ]
+        );
 
-        if (!empty($this->options->name)) {
+        if (! empty($this->options->name)) {
             session_name($this->options->name);
         }
 
-        if (!session_start()) {
+        if (! session_start()) {
             throw new SessionException('Unable to start the session');
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\RequestValidators;
 
@@ -12,12 +12,13 @@ class UserLoginRequestValidator implements RequestValidatorInterface
 {
     public function validate(array $data): array
     {
-        $validator = new Validator($data);
-        $validator->rule('required', ['email', 'password']);
-        $validator->rule('email', 'email');
+        $v = new Validator($data);
 
-        if (!$validator->validate()) {
-            throw new ValidationException($validator->errors());
+        $v->rule('required', ['email', 'password']);
+        $v->rule('email', 'email');
+
+        if (! $v->validate()) {
+            throw new ValidationException($v->errors());
         }
 
         return $data;

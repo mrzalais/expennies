@@ -13,7 +13,6 @@ use App\RequestValidators\UserLoginRequestValidator;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
-use Valitron\Validator;
 
 class AuthController
 {
@@ -53,7 +52,7 @@ class AuthController
             $request->getParsedBody()
         );
 
-        if (!$this->auth->attemptLogin($data)) {
+        if (! $this->auth->attemptLogin($data)) {
             throw new ValidationException(['password' => ['You have entered an invalid username or password']]);
         }
 
@@ -62,7 +61,7 @@ class AuthController
 
     public function logOut(Request $request, Response $response): Response
     {
-        $this->auth->logout();
+        $this->auth->logOut();
 
         return $response->withHeader('Location', '/')->withStatus(302);
     }

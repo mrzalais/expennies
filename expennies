@@ -31,4 +31,3 @@ $cliApp->addCommands($migrationCommands($dependencyFactory));
 $cliApp->addCommands(array_map(fn($command) => $container->get($command), $customCommands));
 
 $cliApp->run();
-

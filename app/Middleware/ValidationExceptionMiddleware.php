@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Middleware;
 
@@ -18,7 +18,7 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
     public function __construct(
         private readonly ResponseFactoryInterface $responseFactory,
         private readonly SessionInterface $session,
-        private readonly RequestService $requestService,
+        private readonly RequestService $requestService
     ) {
     }
 
@@ -26,14 +26,14 @@ class ValidationExceptionMiddleware implements MiddlewareInterface
     {
         try {
             return $handler->handle($request);
-        } catch (ValidationException $exception) {
+        } catch (ValidationException $e) {
             $response = $this->responseFactory->createResponse();
-            $referer = $this->requestService->getReferer($request);
-            $oldData = $request->getParsedBody();
+            $referer  = $this->requestService->getReferer($request);
+            $oldData  = $request->getParsedBody();
 
             $sensitiveFields = ['password', 'confirmPassword'];
 
-            $this->session->flash('errors', $exception->errors);
+            $this->session->flash('errors', $e->errors);
             $this->session->flash('old', array_diff_key($oldData, array_flip($sensitiveFields)));
 
             return $response->withHeader('Location', $referer)->withStatus(302);
