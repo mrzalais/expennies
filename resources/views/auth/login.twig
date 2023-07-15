@@ -16,6 +16,8 @@
                                     Login
                                 </h2>
                                 <form method="post" action="/login">
+                                    {{ csrf.fields | raw }}
+
                                     <div class="form-outline form-white mb-4">
                                         <input type="email" name="email" class="form-control form-control-lg {% if errors.email or errors.password %}is-invalid{% endif %}"
                                                value="{{ old.email }}"
