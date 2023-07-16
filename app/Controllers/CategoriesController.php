@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace App\Controllers;
 
 use App\Contracts\RequestValidatorFactoryInterface;
-use App\DataObjects\RegisterUserData;
 use App\RequestValidators\CreateCategoryRequestValidator;
 use App\Services\CategoryService;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,6 +26,9 @@ class CategoriesController
         return $this->twig->render(
             $response,
             'categories/index.twig',
+            [
+                'categories' => $this->categoryService->getAll(),
+            ]
         );
     }
 
