@@ -16,7 +16,7 @@ window.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.save-category-btn').addEventListener('click', function (event) {
         const categoryId = event.currentTarget.getAttribute('data-id')
 
-        fetch(`/categories/${ categoryId }`, {
+        fetch(`/categories/${categoryId}`, {
             method: 'POST',
             body: JSON.stringify({
                 name: editCategoryModal._element.querySelector('input[name="name"]').value,
@@ -25,7 +25,8 @@ window.addEventListener('DOMContentLoaded', function () {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(response => {
+        }).then(response => response.json())
+          .then(response => {
               console.log(response)
         })
     })
