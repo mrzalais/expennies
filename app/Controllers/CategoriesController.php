@@ -67,7 +67,7 @@ class CategoriesController
 
     public function update(Request $request, Response $response, array $args): Response
     {
-        $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
+        $data = $this->requestValidatorFactory->make(UpdateCategoryRequestValidator::class)->validate(
             $request->getParsedBody()
         );
 
@@ -77,8 +77,8 @@ class CategoriesController
             return $response->withStatus(404);
         }
 
-        $data = ['status' => 'ok'];
+        $this->categoryService->update($category, $data['name']);
 
-        return $this->responseFormatter->asJson($response, $data);
+        return $response;
     }
 }
