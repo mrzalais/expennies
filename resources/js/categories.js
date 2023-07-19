@@ -19,7 +19,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
         post(`/categories/${categoryId}`, {
             name: editCategoryModal._element.querySelector('input[name="name"]').value,
-        }).then(response => {
+        }, editCategoryModal._element).then(response => {
             if (response.ok) {
                 editCategoryModal.hide()
             }
