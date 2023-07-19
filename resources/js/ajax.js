@@ -17,11 +17,29 @@ const ajax = (url, method = 'get', data = {}) => {
     url += '?' + (new URLSearchParams(data)).toString();
   }
 
-  return fetch(url, options).then(response => response.json())
+  return fetch(url, options).then(response => {
+    if (!response.ok) {
+      if (response.status === 422) {
+        response.json().then(errors => {
+          handleValidationErrors(errors)
+        })
+      }
+    }
+
+    return response
+  })
 }
 
 const get  = (url, data) => ajax(url, 'get', data)
 const post = (url, data) => ajax(url, 'post', data)
+
+function handleValidationErrors(errors) {
+  for (const name in errors) {
+    const element = document.querySelector(`input[name="${ name }"]`)
+
+    element.classList.add('is-invalid')
+  }
+}
 
 function getCsrfFields() {
   const csrfNameField  = document.querySelector('#csrfName')
