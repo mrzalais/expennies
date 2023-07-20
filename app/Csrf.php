@@ -1,9 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
+use Closure;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -14,9 +15,11 @@ class Csrf
     {
     }
 
-    public function failureHandler(): \Closure
+    public function failureHandler(): Closure
     {
-        return fn(ServerRequestInterface $request, RequestHandlerInterface $handler)
-        => $this->responseFactory->createResponse()->withStatus(403);
+        return fn(
+            ServerRequestInterface $request,
+            RequestHandlerInterface $handler
+        ) => $this->responseFactory->createResponse()->withStatus(403);
     }
 }

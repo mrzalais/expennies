@@ -47,7 +47,7 @@ class CategoryService
 
         $this->entityManager->persist($category);
         $this->entityManager->flush();
-
+        
         return $category;
     }
 }
