@@ -81,14 +81,22 @@ class CategoriesController
     {
         $params = $request->getQueryParams();
 
-        $categories = $this->categoryService->getPaginatedCategories((int) $params['start'], (int) $params['length']);
+        $orderBy = $params['columns'][$params['order'][0]['column']]['data'];
+        $orderDir = $params['order'][0]['dir'];
+
+        $categories = $this->categoryService->getPaginatedCategories(
+            (int) $params['start'],
+            (int) $params['length'],
+            $orderBy,
+            $orderDir
+        );
 
         $transformer = function (Category $category) {
             return [
                 'id'        => $category->getId(),
                 'name'      => $category->getName(),
                 'createdAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
-                'updatedAt' => $category->getCreatedAt()->format('m/d/Y g:i A'),
+                'updatedAt' => $category->getUpdatedAt()->format('m/d/Y g:i A'),
             ];
         };
 
