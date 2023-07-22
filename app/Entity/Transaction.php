@@ -1,24 +1,28 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
-use DateTime;
+use App\Entity\Traits\HasTimestamps;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity, Table('transactions')]
+#[HasLifecycleCallbacks]
 class Transaction
 {
+    use HasTimestamps;
+
     #[Id, Column(options: ['unsigned' => true]), GeneratedValue]
     private int $id;
 
@@ -26,16 +30,10 @@ class Transaction
     private string $description;
 
     #[Column]
-    private DateTime $date;
+    private \DateTime $date;
 
     #[Column(type: Types::DECIMAL, precision: 13, scale: 3)]
     private float $amount;
-
-    #[Column(name: 'created_at')]
-    private DateTime $createdAt;
-
-    #[Column(name: 'updated_at')]
-    private DateTime $updatedAt;
 
     #[ManyToOne(inversedBy: 'transactions')]
     private User $user;
@@ -68,12 +66,12 @@ class Transaction
         return $this;
     }
 
-    public function getDate(): DateTime
+    public function getDate(): \DateTime
     {
         return $this->date;
     }
 
-    public function setDate(DateTime $date): Transaction
+    public function setDate(\DateTime $date): Transaction
     {
         $this->date = $date;
 
@@ -88,30 +86,6 @@ class Transaction
     public function setAmount(float $amount): Transaction
     {
         $this->amount = $amount;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTime $createdAt): Transaction
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(DateTime $updatedAt): Transaction
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
