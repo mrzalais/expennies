@@ -19,7 +19,6 @@ use App\Session;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -108,7 +107,7 @@ return [
     ),
     Filesystem::class => function(Config $config) {
         $adapter = match($config->get('storage.driver')) {
-            StorageDriver::Local => new LocalFilesystemAdapter(STORAGE_PATH)
+            StorageDriver::Local => new League\Flysystem\Local\LocalFilesystemAdapter(STORAGE_PATH),
         };
 
         return new League\Flysystem\Filesystem($adapter);

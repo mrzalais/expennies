@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\RequestValidators;
 
@@ -16,7 +16,8 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
         /** @var UploadedFileInterface $uploadedFile */
         $uploadedFile = $data['receipt'] ?? null;
 
-        if (!$uploadedFile) {
+        // 1. Validate uploaded file
+        if (! $uploadedFile) {
             throw new ValidationException(['receipt' => ['Please select a receipt file']]);
         }
 
@@ -24,29 +25,32 @@ class UploadReceiptRequestValidator implements RequestValidatorInterface
             throw new ValidationException(['receipt' => ['Failed to upload the receipt file']]);
         }
 
-        $maxFileSize = 5 * 1025 * 1024;
+        // 2. Validate the file size
+        $maxFileSize = 5 * 1024 * 1024;
 
         if ($uploadedFile->getSize() > $maxFileSize) {
             throw new ValidationException(['receipt' => ['Maximum allowed size is 5 MB']]);
         }
 
+        // 3. Validate the file name
         $filename = $uploadedFile->getClientFilename();
 
-        if (!preg_match('/^[a-zA-Z0-9\s._-]+$/', $filename)) {
+        if (! preg_match('/^[a-zA-Z0-9\s._-]+$/', $filename)) {
             throw new ValidationException(['receipt' => ['Invalid filename']]);
         }
 
+        // 4. Validate file type
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'application/pdf'];
-        $tmpFilePath = $uploadedFile->getStream()->getMetadata('uri');
+        $tmpFilePath      = $uploadedFile->getStream()->getMetadata('uri');
 
-        if (!in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
+        if (! in_array($uploadedFile->getClientMediaType(), $allowedMimeTypes)) {
             throw new ValidationException(['receipt' => ['Receipt has to be either an image or a pdf document']]);
         }
 
         $detector = new FinfoMimeTypeDetector();
         $mimeType = $detector->detectMimeType($tmpFilePath, $uploadedFile->getStream()->getContents());
 
-        if (!in_array($mimeType, $allowedMimeTypes)) {
+        if (! in_array($mimeType, $allowedMimeTypes)) {
             throw new ValidationException(['receipt' => ['Invalid file type']]);
         }
 

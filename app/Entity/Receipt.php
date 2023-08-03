@@ -35,7 +35,7 @@ class Receipt
         return $this->id;
     }
 
-    public function getFileName(): string
+    public function getFilename(): string
     {
         return $this->filename;
     }

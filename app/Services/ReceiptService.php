@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -13,12 +13,12 @@ class ReceiptService
     {
     }
 
-    public function create($transaction, string $fileName, string $storageFilename): Receipt
+    public function create($transaction, string $filename, string $storageFilename): Receipt
     {
         $receipt = new Receipt();
 
         $receipt->setTransaction($transaction);
-        $receipt->setFilename($fileName);
+        $receipt->setFilename($filename);
         $receipt->setStorageFilename($storageFilename);
         $receipt->setCreatedAt(new \DateTime());
 
@@ -26,5 +26,10 @@ class ReceiptService
         $this->entityManager->flush();
 
         return $receipt;
+    }
+
+    public function getById(int $id)
+    {
+        return $this->entityManager->find(Receipt::class, $id);
     }
 }

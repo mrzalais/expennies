@@ -26,10 +26,10 @@ class ReceiptController
     public function store(Request $request, Response $response, array $args): Response
     {
         /** @var UploadedFileInterface $file */
-        $file = $this->requestValidatorFactory->make(UploadReceiptRequestValidator::class)
-            ->validate($request->getUploadedFiles())['receipt'];
-
-        $fileName = $file->getClientFilename();
+        $file     = $this->requestValidatorFactory->make(UploadReceiptRequestValidator::class)->validate(
+            $request->getUploadedFiles()
+        )['receipt'];
+        $filename = $file->getClientFilename();
 
         $id = (int) $args['id'];
 
@@ -41,7 +41,21 @@ class ReceiptController
 
         $this->filesystem->write('receipts/' . $randomFilename, $file->getStream()->getContents());
 
-        $this->receiptService->create($transaction, $fileName, $randomFilename);
+        $this->receiptService->create($transaction, $filename, $randomFilename);
+
+        return $response;
+    }
+
+    public function download(Request $request, Response $response, array $args): Response
+    {
+        // TODO
+
+        return $response;
+    }
+
+    public function delete(Request $request, Response $response, array $args): Response
+    {
+        // TODO
 
         return $response;
     }

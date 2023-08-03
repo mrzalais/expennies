@@ -37,5 +37,5 @@ return [
     ],
     'storage' => [
         'driver' => StorageDriver::Local,
-    ],
+    ]
 ];
