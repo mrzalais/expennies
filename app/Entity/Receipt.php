@@ -30,6 +30,9 @@ class Receipt
     #[ManyToOne(inversedBy: 'receipts')]
     private Transaction $transaction;
 
+    #[Column(name: 'media_type')]
+    private string $mediaType;
+
     public function getId(): int
     {
         return $this->id;
@@ -81,6 +84,18 @@ class Receipt
     public function setStorageFilename(string $storageFilename): Receipt
     {
         $this->storageFilename = $storageFilename;
+
+        return $this;
+    }
+
+    public function getMediaType(): string
+    {
+        return $this->mediaType;
+    }
+
+    public function setMediaType(string $mediaType): Receipt
+    {
+        $this->mediaType = $mediaType;
 
         return $this;
     }
