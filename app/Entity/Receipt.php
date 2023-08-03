@@ -24,6 +24,9 @@ class Receipt
     #[Column(name: 'storage_filename')]
     private string $storageFilename;
 
+    #[Column(name: 'media_type')]
+    private string $mediaType;
+
     #[Column(name: 'created_at')]
     private DateTime $createdAt;
 
