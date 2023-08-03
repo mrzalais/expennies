@@ -33,9 +33,6 @@ class Receipt
     #[ManyToOne(inversedBy: 'receipts')]
     private Transaction $transaction;
 
-    #[Column(name: 'media_type')]
-    private string $mediaType;
-
     public function getId(): int
     {
         return $this->id;
