@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\DataObjects\TransactionData;
+use App\Entity\Transaction;
 use App\Entity\User;
 use Clockwork\Clockwork;
 use Clockwork\Request\LogLevel;
@@ -45,6 +46,7 @@ class TransactionImportService
 
             if ($count % $batchSize === 0) {
                 $this->entityManager->flush();
+                $this->entityManager->clear(Transaction::class);
 
                 $count = 1;
             } else {
@@ -54,6 +56,7 @@ class TransactionImportService
 
         if ($count > 1) {
             $this->entityManager->flush();
+            $this->entityManager->clear();
         }
 
         $this->clockwork->log(LogLevel::DEBUG, 'Memory usage after: ' . memory_get_usage());
