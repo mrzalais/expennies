@@ -57,8 +57,6 @@ class CategoryService
     {
         $category->setName($name);
 
-        $this->entityManager->persist($category);
-
         return $category;
     }
 

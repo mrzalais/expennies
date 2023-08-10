@@ -7,6 +7,9 @@ namespace App\Services;
 use App\Contracts\EntityManagerServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * @mixin EntityManagerInterface
+ */
 class EntityManagerService implements EntityManagerServiceInterface
 {
     public function __construct(protected readonly EntityManagerInterface $entityManager)
@@ -27,6 +30,7 @@ class EntityManagerService implements EntityManagerServiceInterface
         if ($entity) {
             $this->entityManager->persist($entity);
         }
+
         $this->entityManager->flush();
     }
 
