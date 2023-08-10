@@ -1,19 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Services;
 
 use App\DataObjects\TransactionData;
 use App\Entity\Transaction;
 use App\Entity\User;
+use Doctrine\ORM\EntityManager;
 
 class TransactionImportService
 {
     public function __construct(
         private readonly CategoryService $categoryService,
         private readonly TransactionService $transactionService,
-        private readonly EntityManagerService $entityManagerService,
+        private readonly EntityManager $entityManager
     ) {
     }
 
@@ -24,7 +25,7 @@ class TransactionImportService
 
         fgetcsv($resource);
 
-        $count = 1;
+        $count     = 1;
         $batchSize = 250;
         while (($row = fgetcsv($resource)) !== false) {
             [$date, $description, $category, $amount] = $row;
@@ -38,8 +39,8 @@ class TransactionImportService
             $this->transactionService->create($transactionData, $user);
 
             if ($count % $batchSize === 0) {
-                $this->entityManagerService->flush();
-                $this->entityManagerService->clear(Transaction::class);
+                $this->entityManager->flush();
+                $this->entityManager->clear(Transaction::class);
 
                 $count = 1;
             } else {
@@ -48,8 +49,8 @@ class TransactionImportService
         }
 
         if ($count > 1) {
-            $this->entityManagerService->flush();
-            $this->entityManagerService->clear();
+            $this->entityManager->flush();
+            $this->entityManager->clear();
         }
     }
 }
