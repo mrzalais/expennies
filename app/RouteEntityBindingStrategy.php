@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
 use App\Contracts\EntityManagerServiceInterface;
-use InvalidArgumentException;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -29,7 +28,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
         array $routeArguments
     ): ResponseInterface {
         $callableReflection = $this->createReflectionForCallable($callable);
-        $resolvedArguments = [];
+        $resolvedArguments  = [];
 
         foreach ($callableReflection->getParameters() as $parameter) {
             $type = $parameter->getType();
@@ -39,7 +38,7 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
             }
 
             $paramName = $parameter->getName();
-            $typeName = $type->getName();
+            $typeName  = $type->getName();
 
             if ($type->isBuiltin()) {
                 if ($typeName === 'array' && $paramName === 'args') {
@@ -53,8 +52,10 @@ class RouteEntityBindingStrategy implements InvocationStrategyInterface
                 } else {
                     $entityId = $routeArguments[$paramName] ?? null;
 
-                    if (! $entityId) {
-                        throw new InvalidArgumentException('Unable to resolve argument "' . $paramName . '" in the callable');
+                    if (! $entityId || $parameter->allowsNull()) {
+                        throw new \InvalidArgumentException(
+                            'Unable to resolve argument "' . $paramName . '" in the callable'
+                        );
                     }
 
                     $entity = $this->entityManagerService->find($typeName, $entityId);
