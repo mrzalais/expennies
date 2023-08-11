@@ -7,7 +7,6 @@ namespace App\Entity;
 use App\Contracts\OwnableInterface;
 use App\Contracts\UserInterface;
 use App\Entity\Traits\HasTimestamps;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\Column;
@@ -37,7 +36,7 @@ class User implements UserInterface
     private string $password;
 
     #[Column(name: 'verified_at', nullable: true)]
-    private ?DateTime $verifiedAt;
+    private ?\DateTime $verifiedAt;
 
     #[OneToMany(mappedBy: 'user', targetEntity: Category::class)]
     private Collection $categories;
@@ -121,8 +120,15 @@ class User implements UserInterface
         return $this->getId() === $entity->getUser()->getId();
     }
 
-    public function getVerifiedAt(): ?DateTime
+    public function getVerifiedAt(): ?\DateTime
     {
         return $this->verifiedAt;
+    }
+
+    public function setVerifiedAt(\DateTime $verifiedAt): static
+    {
+        $this->verifiedAt = $verifiedAt;
+
+        return $this;
     }
 }
