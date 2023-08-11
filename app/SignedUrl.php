@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App;
 
-use DateTime;
 use Slim\Interfaces\RouteParserInterface;
 
 class SignedUrl
@@ -13,18 +12,19 @@ class SignedUrl
     {
     }
 
-    public function fromRoute(string $routeName, array $routeParams, DateTime $expirationDate): string
+    public function fromRoute(string $routeName, array $routeParams, \DateTime $expirationDate): string
     {
-        $queryParams = ['expiration' => $expirationDate->getTimestamp()];
-        $baseUrl = trim($this->config->get('app_url'), '/');
-        $url = $baseUrl . $this->routeParser->urlFor($routeName, $routeParams, $queryParams);
+        $expiration  = $expirationDate->getTimestamp();
+        $queryParams = ['expiration' => $expiration];
+        $baseUrl     = trim($this->config->get('app_url'), '/');
+        $url         = $baseUrl . $this->routeParser->urlFor($routeName, $routeParams, $queryParams);
 
         $signature = hash_hmac('sha256', $url, $this->config->get('app_key'));
 
         return $baseUrl . $this->routeParser->urlFor(
                 $routeName,
                 $routeParams,
-                $queryParams + ['signature' => $signature],
+                $queryParams + ['signature' => $signature]
             );
     }
 }

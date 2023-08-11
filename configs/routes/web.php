@@ -17,7 +17,7 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app) {
-    $app->group('', function(RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         $group->get('/', [HomeController::class, 'index']);
 
         $group->group('/categories', function (RouteCollectorProxy $categories) {
@@ -50,12 +50,13 @@ return function (App $app) {
         });
     })->add(VerifyEmailMiddleware::class)->add(AuthMiddleware::class);
 
-    $app->group('', function(RouteCollectorProxy $group) {
+    $app->group('', function (RouteCollectorProxy $group) {
         $group->post('/logout', [AuthController::class, 'logOut']);
         $group->get('/verify', [VerifyController::class, 'index']);
         $group->get('/verify/{id}/{hash}', [VerifyController::class, 'verify'])
-            ->setName('verify')
-            ->add(ValidateSignatureMiddleware::class);
+              ->setName('verify')
+              ->add(ValidateSignatureMiddleware::class);
+        $group->post('/verify', [VerifyController::class, 'resend']);
     })->add(AuthMiddleware::class);
 
     $app->group('', function (RouteCollectorProxy $guest) {
@@ -63,5 +64,6 @@ return function (App $app) {
         $guest->get('/register', [AuthController::class, 'registerView']);
         $guest->post('/login', [AuthController::class, 'logIn']);
         $guest->post('/register', [AuthController::class, 'register']);
+        $guest->post('/login/two-factor', [AuthController::class, 'twoFactorLogin']);
     })->add(GuestMiddleware::class);
 };

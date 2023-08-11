@@ -151,11 +151,11 @@ return [
     EntityManagerServiceInterface::class    => fn(EntityManagerInterface $entityManager) => new EntityManagerService(
         $entityManager
     ),
-    MailerInterface::class => function(Config $config) {
+    MailerInterface::class                  => function (Config $config) {
         $transport = Transport::fromDsn($config->get('mailer.dsn'));
 
         return new Mailer($transport);
     },
-    BodyRendererInterface::class => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
-    RouteParserInterface::class => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
+    BodyRendererInterface::class            => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
+    RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
 ];
