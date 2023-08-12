@@ -15,14 +15,13 @@ class TwoFactorAuthEmail
     public function __construct(
         private readonly Config $config,
         private readonly MailerInterface $mailer,
-        private readonly BodyRendererInterface $renderer,
+        private readonly BodyRendererInterface $renderer
     ) {
     }
 
     public function send(UserLoginCode $userLoginCode): void
     {
-        $email = $userLoginCode->getUser()->getEmail();
-
+        $email   = $userLoginCode->getUser()->getEmail();
         $message = (new TemplatedEmail())
             ->from($this->config->get('mailer.from'))
             ->to($email)

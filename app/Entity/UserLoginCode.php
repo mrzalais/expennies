@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Entity;
 
-use DateTime;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -25,7 +24,7 @@ class UserLoginCode
     private bool $isActive;
 
     #[Column]
-    private DateTime $expiration;
+    private \DateTime $expiration;
 
     #[ManyToOne]
     private User $user;
@@ -40,12 +39,6 @@ class UserLoginCode
         return $this->id;
     }
 
-    public function setId(int $id): UserLoginCode
-    {
-        $this->id = $id;
-        return $this;
-    }
-
     public function getCode(): string
     {
         return $this->code;
@@ -54,6 +47,7 @@ class UserLoginCode
     public function setCode(string $code): UserLoginCode
     {
         $this->code = $code;
+
         return $this;
     }
 
@@ -65,17 +59,19 @@ class UserLoginCode
     public function setIsActive(bool $isActive): UserLoginCode
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 
-    public function getExpiration(): DateTime
+    public function getExpiration(): \DateTime
     {
         return $this->expiration;
     }
 
-    public function setExpiration(DateTime $expiration): UserLoginCode
+    public function setExpiration(\DateTime $expiration): UserLoginCode
     {
         $this->expiration = $expiration;
+
         return $this;
     }
 
@@ -87,6 +83,7 @@ class UserLoginCode
     public function setUser(User $user): UserLoginCode
     {
         $this->user = $user;
+
         return $this;
     }
 }

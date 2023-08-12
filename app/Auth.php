@@ -101,7 +101,7 @@ class Auth implements AuthInterface
         $this->user = $user;
     }
 
-    public function startLoginWith2FA(UserInterface $user)
+    public function startLoginWith2FA(UserInterface $user): void
     {
         $this->session->regenerate();
         $this->session->put('2fa', $user->getId());
@@ -128,8 +128,6 @@ class Auth implements AuthInterface
         if (! $this->userLoginCodeService->verify($user, $data['code'])) {
             return false;
         }
-
-        $this->userLoginCodeService->deactivateAllActiveCodes($user);
 
         $this->session->forget('2fa');
 

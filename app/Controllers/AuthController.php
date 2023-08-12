@@ -83,7 +83,7 @@ class AuthController
         );
 
         if (! $this->auth->attemptTwoFactorLogin($data)) {
-            throw new ValidationException(['code' => ['invalid code']]);
+            throw new ValidationException(['code' => ['Invalid Code']]);
         }
 
         return $response;
