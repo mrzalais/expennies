@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Mail;
 
 use App\Config;
+use App\Entity\PasswordReset;
 use App\SignedUrl;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
