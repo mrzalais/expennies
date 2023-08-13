@@ -40,22 +40,28 @@ return [
     'storage'               => [
         'driver' => StorageDriver::Local,
         's3' => [
-            'key' => $_ENV['S3_KEY'],
-            'secret' => $_ENV['S3_SECRET'],
-            'region' => $_ENV['S3_REGION'],
-            'version' => $_ENV['S3_VERSION'],
+            'key'      => $_ENV['S3_KEY'],
+            'secret'   => $_ENV['S3_SECRET'],
+            'region'   => $_ENV['S3_REGION'],
+            'version'  => $_ENV['S3_VERSION'],
             'endpoint' => $_ENV['S3_ENDPOINT'],
-            'bucket' => $_ENV['S3_BUCKET'],
-        ],
+            'bucket'   => $_ENV['S3_BUCKET']
+        ]
     ],
     'mailer'                => [
         'dsn'  => $_ENV['MAILER_DSN'],
         'from' => $_ENV['MAILER_FROM'],
     ],
-    'redis' => [
+    'redis'                 => [
         'host'     => $_ENV['REDIS_HOST'],
         'port'     => $_ENV['REDIS_PORT'],
         'password' => $_ENV['REDIS_PASSWORD'],
     ],
-    'trusted_proxies' => [],
+    'trusted_proxies'       => [],
+    'limiter'               => [
+        'id'       => 'default',
+        'policy'   => 'fixed_window',
+        'interval' => '1 minute',
+        'limit'    => 25,
+    ],
 ];

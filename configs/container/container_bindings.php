@@ -26,6 +26,9 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use DoctrineExtensions\Query\Mysql\DateFormat;
+use DoctrineExtensions\Query\Mysql\Month;
+use DoctrineExtensions\Query\Mysql\Year;
 use League\Flysystem\Filesystem;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -89,6 +92,18 @@ return [
 
         $ormConfig->addFilter('user', UserFilter::class);
 
+        if (class_exists('DoctrineExtensions\Query\Mysql\Year')) {
+            $ormConfig->addCustomDatetimeFunction('YEAR', Year::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\Month')) {
+            $ormConfig->addCustomDatetimeFunction('MONTH', Month::class);
+        }
+
+        if (class_exists('DoctrineExtensions\Query\Mysql\DateFormat')) {
+            $ormConfig->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
+        }
+
         return new EntityManager(
             DriverManager::getConnection($config->get('doctrine.connection'), $ormConfig),
             $ormConfig
@@ -139,16 +154,18 @@ return [
         $responseFactory, failureHandler: $csrf->failureHandler(), persistentTokenMode: true
     ),
     Filesystem::class                       => function (Config $config) {
-        $digitalOcean = function(array $options) {
-            $client = new Aws\S3\S3Client([
-                'credentials' => [
-                    'key' => $options['key'],
-                    'secret' => $options['secret'],
-                ],
-                'region' => $options['region'],
-                'version' => $options['version'],
-                'endpoint' => $options['endpoint'],
-            ]);
+        $digitalOcean = function (array $options) {
+            $client = new Aws\S3\S3Client(
+                [
+                    'credentials' => [
+                        'key'    => $options['key'],
+                        'secret' => $options['secret'],
+                    ],
+                    'region'      => $options['region'],
+                    'version'     => $options['version'],
+                    'endpoint'    => $options['endpoint'],
+                ]
+            );
 
             return new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
                 $client,
@@ -181,8 +198,8 @@ return [
     },
     BodyRendererInterface::class            => fn(Twig $twig) => new BodyRenderer($twig->getEnvironment()),
     RouteParserInterface::class             => fn(App $app) => $app->getRouteCollector()->getRouteParser(),
-    CacheInterface::class                   => fn (RedisAdapter $redisAdapter) => new Psr16Cache($redisAdapter),
-    RedisAdapter::class => function(Config $config) {
+    CacheInterface::class                   => fn(RedisAdapter $redisAdapter) => new Psr16Cache($redisAdapter),
+    RedisAdapter::class                     => function (Config $config) {
         $redis  = new \Redis();
         $config = $config->get('redis');
 
@@ -191,12 +208,7 @@ return [
 
         return new RedisAdapter($redis);
     },
-    RateLimiterFactory::class => function(RedisAdapter $redisAdapter) {
-        $storage = new CacheStorage($redisAdapter);
-
-        return new RateLimiterFactory(
-            ['id' => 'default', 'policy' => 'fixed_window', 'interval' => '1 minute', 'limit' => 3],
-            $storage
-        );
-    }
+    RateLimiterFactory::class               => fn(RedisAdapter $redisAdapter, Config $config) => new RateLimiterFactory(
+        $config->get('limiter'), new CacheStorage($redisAdapter)
+    ),
 ];
