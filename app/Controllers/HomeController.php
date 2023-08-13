@@ -6,7 +6,6 @@ namespace App\Controllers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
-use Psr\Http\Message\ServerRequestInterface as Request;
 
 class HomeController
 {
@@ -14,10 +13,8 @@ class HomeController
     {
     }
 
-    public function index(Request $request, Response $response): Response
+    public function index(Response $response): Response
     {
-        $user = $request->getAttribute('user');
-
         return $this->twig->render($response, 'dashboard.twig');
     }
 }
