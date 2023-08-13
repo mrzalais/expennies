@@ -22,7 +22,7 @@ class PasswordResetController
         private readonly RequestValidatorFactoryInterface $requestValidatorFactory,
         private readonly UserProviderServiceInterface $userProviderService,
         private readonly PasswordResetService $passwordResetService,
-        private readonly ForgotPasswordEmail $forgotPasswordEmail,
+        private readonly ForgotPasswordEmail $forgotPasswordEmail
     ) {
     }
 
@@ -50,7 +50,7 @@ class PasswordResetController
         return $response;
     }
 
-    public function showResetPasswordForm(Request $request, Response $response, array $args): Response
+    public function showResetPasswordForm(Response $response, array $args): Response
     {
         $passwordReset = $this->passwordResetService->findByToken($args['token']);
 
@@ -66,6 +66,7 @@ class PasswordResetController
         $data = $this->requestValidatorFactory->make(ResetPasswordRequestValidator::class)->validate(
             $request->getParsedBody()
         );
+
         $passwordReset = $this->passwordResetService->findByToken($args['token']);
 
         if (! $passwordReset) {

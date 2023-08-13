@@ -34,7 +34,7 @@ class UserProviderService implements UserProviderServiceInterface
 
         $user->setName($data->name);
         $user->setEmail($data->email);
-        $user->setPassword($this->hashService->hasPassword($this->password));
+        $user->setPassword($this->hashService->hashPassword($data->password));
 
         $this->entityManager->sync($user);
 
@@ -44,6 +44,13 @@ class UserProviderService implements UserProviderServiceInterface
     public function verifyUser(UserInterface $user): void
     {
         $user->setVerifiedAt(new \DateTime());
+
+        $this->entityManager->sync($user);
+    }
+
+    public function updatePassword(UserInterface $user, string $password): void
+    {
+        $user->setPassword($this->hashService->hashPassword($password));
 
         $this->entityManager->sync($user);
     }
